@@ -1,9 +1,12 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import shutil
 import uuid
 from datetime import datetime
+import traceback
+from services.depth_estimator import get_depth_estimator
 
 app = FastAPI(title="DamageControl AI API")
 
@@ -19,6 +22,9 @@ app.add_middleware(
 # Créer le dossier uploads s'il n'existe pas
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
+
+# Servir les fichiers statiques (images uploadées et depth maps)
+app.mount("/files", StaticFiles(directory=str(UPLOAD_DIR)), name="files")
 
 
 @app.get("/")
@@ -59,6 +65,45 @@ async def upload_image(file: UploadFile = File(...)):
         "original_filename": file.filename,
         "size": file_path.stat().st_size,
         "path": str(file_path),
+        "url": f"/files/{unique_filename}",
         "uploaded_at": datetime.now().isoformat(),
         "message": "Image uploadée avec succès",
     }
+
+
+@app.post("/analyze/{filename}")
+async def analyze_image(filename: str):
+    """
+    Analyse une image uploadée et génère une depth map
+    """
+    file_path = UPLOAD_DIR / filename
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Image non trouvée")
+
+    try:
+        print(f"📊 Début de l'analyse pour: {filename}")
+
+        # Obtenir l'estimateur de profondeur
+        estimator = get_depth_estimator()
+        print("✓ Estimateur obtenu")
+
+        # Générer la depth map
+        result = estimator.estimate_depth(file_path)
+        print("✓ Depth map générée")
+
+        return {
+            "status": "success",
+            "original_image": f"/files/{filename}",
+            "depth_map": f"/files/{result['depth_map_filename']}",
+            "stats": result["stats"],
+            "device_used": result["device_used"],
+            "message": "Analyse de profondeur terminée",
+        }
+    except Exception as e:
+        # Afficher l'erreur complète dans les logs
+        print("❌ ERREUR lors de l'analyse:")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de l'analyse: {str(e)}"
+        )

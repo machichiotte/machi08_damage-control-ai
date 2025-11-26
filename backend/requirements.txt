@@ -6,3 +6,9 @@ numpy
 opencv-python
 python-dotenv
 aiofiles
+
+# AI/ML Dependencies
+torch
+torchvision
+transformers
+timm
