@@ -132,11 +132,39 @@ const detectObjects = async () => {
   }
 }
 
+const isDetectingParts = ref(false)
+const partsResult = ref(null)
+
+const detectParts = async () => {
+  if (!uploadResult.value) return
+
+  isDetectingParts.value = true
+  errorMessage.value = null
+
+  try {
+    const response = await fetch(`${API_URL}/detect/parts/${uploadResult.value.filename}`, {
+      method: 'POST'
+    })
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la détection de pièces')
+    }
+
+    const data = await response.json()
+    partsResult.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+  } finally {
+    isDetectingParts.value = false
+  }
+}
+
 const reset = () => {
   uploadedImage.value = null
   uploadResult.value = null
   analysisResult.value = null
   detectionResult.value = null
+  partsResult.value = null
   errorMessage.value = null
 }
 </script>
@@ -216,6 +244,16 @@ const reset = () => {
                 Détection en cours...
               </span>
             </button>
+
+            <button v-if="!partsResult" @click="detectParts" :disabled="isDetectingParts"
+              class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:from-gray-500 disabled:to-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed md:col-span-2">
+              <span v-if="!isDetectingParts">🧩 Analyser les pièces (Zero-Shot)</span>
+              <span v-else class="flex items-center justify-center gap-2">
+                <span
+                  class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+                Analyse OWL-ViT en cours...
+              </span>
+            </button>
           </div>
         </div>
 
@@ -260,9 +298,9 @@ const reset = () => {
           </div>
         </div>
 
-        <!-- Résultat de la détection d'objets -->
+        <!-- Résultat de la détection d'objets (YOLO) -->
         <div v-if="detectionResult" class="bg-slate-800 rounded-xl p-6 border border-orange-500/50">
-          <h3 class="text-xl font-semibold mb-4 text-orange-400">✓ Détection d'objets terminée</h3>
+          <h3 class="text-xl font-semibold mb-4 text-orange-400">✓ Détection d'objets terminée (YOLO)</h3>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
@@ -270,13 +308,14 @@ const reset = () => {
               <img :src="`${API_URL}${detectionResult.annotated_image}`" alt="Annotated Image"
                 class="w-full rounded-lg border border-orange-500" />
             </div>
-            
+
             <!-- Liste des objets détectés -->
             <div class="bg-slate-900/50 rounded-lg p-4">
-              <h4 class="text-sm font-semibold text-gray-300 mb-3">Objets détectés ({{ detectionResult.stats.total_objects }})</h4>
-              
+              <h4 class="text-sm font-semibold text-gray-300 mb-3">Objets détectés ({{
+                detectionResult.stats.total_objects }})</h4>
+
               <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-                <div v-for="(obj, index) in detectionResult.detections" :key="index" 
+                <div v-for="(obj, index) in detectionResult.detections" :key="index"
                   class="flex justify-between items-center bg-slate-800 p-2 rounded border border-slate-700">
                   <span class="capitalize text-white">{{ obj.class }}</span>
                   <span class="text-xs font-mono text-orange-400">{{ (obj.confidence * 100).toFixed(1) }}%</span>
@@ -286,6 +325,38 @@ const reset = () => {
               <div class="mt-4 pt-4 border-t border-slate-700 text-xs text-gray-400">
                 <p>Classes trouvées : {{ detectionResult.stats.classes_detected.join(', ') }}</p>
                 <p class="mt-1">Confiance moyenne : {{ (detectionResult.stats.avg_confidence * 100).toFixed(1) }}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Résultat de la détection de pièces (OWL-ViT) -->
+        <div v-if="partsResult" class="bg-slate-800 rounded-xl p-6 border border-pink-500/50">
+          <h3 class="text-xl font-semibold mb-4 text-pink-400">✓ Analyse des pièces terminée (OWL-ViT)</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="text-sm text-gray-400 mb-2">Image annotée</p>
+              <img :src="`${API_URL}${partsResult.annotated_image}`" alt="Annotated Image"
+                class="w-full rounded-lg border border-pink-500" />
+            </div>
+
+            <!-- Liste des pièces détectées -->
+            <div class="bg-slate-900/50 rounded-lg p-4">
+              <h4 class="text-sm font-semibold text-gray-300 mb-3">Pièces identifiées ({{
+                partsResult.stats.total_objects }})</h4>
+
+              <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                <div v-for="(obj, index) in partsResult.detections" :key="index"
+                  class="flex justify-between items-center bg-slate-800 p-2 rounded border border-slate-700">
+                  <span class="capitalize text-white">{{ obj.class }}</span>
+                  <span class="text-xs font-mono text-pink-400">{{ (obj.confidence * 100).toFixed(1) }}%</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-4 border-t border-slate-700 text-xs text-gray-400">
+                <p>Pièces trouvées : {{ partsResult.stats.classes_detected.join(', ') }}</p>
+                <p class="mt-1">Confiance moyenne : {{ (partsResult.stats.avg_confidence * 100).toFixed(1) }}%</p>
               </div>
             </div>
           </div>

@@ -146,3 +146,42 @@ async def detect_objects(filename: str):
         raise HTTPException(
             status_code=500, detail=f"Erreur lors de la détection: {str(e)}"
         )
+
+
+@app.post("/detect/parts/{filename}")
+async def detect_parts(filename: str):
+    """
+    Détecte les pièces spécifiques (Zero-Shot) avec OWL-ViT
+    """
+    from services.zero_shot_detector import get_zero_shot_detector
+
+    file_path = UPLOAD_DIR / filename
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Image non trouvée")
+
+    try:
+        print(f"🔍 Début de la détection de pièces pour: {filename}")
+
+        # Obtenir le détecteur Zero-Shot
+        detector = get_zero_shot_detector()
+        print("✓ Détecteur OWL-ViT obtenu")
+
+        # Détecter les pièces
+        result = detector.detect_parts(file_path)
+        print(f"✓ {result['stats']['total_objects']} pièces détectées")
+
+        return {
+            "status": "success",
+            "original_image": f"/files/{filename}",
+            "annotated_image": f"/files/{result['annotated_image_filename']}",
+            "detections": result["detections"],
+            "stats": result["stats"],
+            "message": "Détection de pièces terminée",
+        }
+    except Exception as e:
+        print("❌ ERREUR lors de la détection de pièces:")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de la détection: {str(e)}"
+        )

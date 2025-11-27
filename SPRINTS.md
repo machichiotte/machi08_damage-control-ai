@@ -73,7 +73,7 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 
 1.  **Service IA - Object Detection (YOLO) :**
     - [x] Intégrer YOLO pour détecter les objets/pièces dans l'image
-    - [ ] Identifier les pièces de voiture (pare-chocs, portière, etc.)
+    - [x] Identifier les pièces de voiture (Zero-Shot avec OWL-ViT)
     - [x] Afficher les bounding boxes sur l'image
 2.  **Service IA - Table QA (TAPAS) :**
     - [ ] Créer un endpoint pour uploader un PDF/Image de contrat
@@ -121,10 +121,10 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 
 - ✅ **Sprint 1** : 100% (3/3 tâches principales)
 - ✅ **Sprint 2** : 100% (4/4 tâches principales)
-- 🔄 **Sprint 3** : 0% (0/3 tâches principales) - **EN COURS**
+- 🔄 **Sprint 3** : 33% (1/3 tâches principales) - **EN COURS**
 - 🔄 **Sprint 4** : 33% (1/3 tâches principales - 3D visualization done)
 
-**Progression totale : ~60% (2.5/4 sprints)**
+**Progression totale : ~67% (2.33/4 sprints)**
 
 ---
 
