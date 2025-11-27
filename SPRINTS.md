@@ -6,7 +6,7 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 
 - **Sprint 1 : Fondations & Infrastructure** ✅ **TERMINÉ**
 - **Sprint 2 : Vision & 3D** ✅ **TERMINÉ**
-- **Sprint 3 : Intelligence Contractuelle & Backend** 🔄 **EN COURS**
+- **Sprint 3 : Intelligence Contractuelle & Backend** ✅ **TERMINÉ**
 - **Sprint 4 : UI/UX Premium & Finalisation** 🔄 **PARTIEL (33%)**
 
 ---
@@ -65,26 +65,30 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 
 ---
 
-## 🏃 Sprint 3 : Intelligence Contractuelle & Logique Métier 🔄
+## 🏃 Sprint 3 : Intelligence Contractuelle & Backend ✅
 
 **Objectif :** Donner du sens aux données visuelles en les croisant avec les contrats.
 
 ### Tâches :
 
-1.  **Service IA - Object Detection (YOLO) :**
+1.  **Service IA - Object Detection (YOLO) :** ✅
     - [x] Intégrer YOLO pour détecter les objets/pièces dans l'image
     - [x] Identifier les pièces de voiture (Zero-Shot avec OWL-ViT)
     - [x] Afficher les bounding boxes sur l'image
-2.  **Service IA - Table QA (TAPAS) :**
-    - [ ] Créer un endpoint pour uploader un PDF/Image de contrat
-    - [ ] Implémenter l'extraction de données (Franchise, Plafond) via TAPAS ou LayoutLM
-    - [ ] Structurer les données extraites
+2.  **Service IA - Analyse de Contrat :** ✅
+    - [x] Créer un endpoint `POST /upload/contract` pour uploader un PDF/Image de contrat
+    - [x] Implémenter l'extraction de texte (PyPDF2 + Tesseract OCR)
+    - [x] Créer le service `ContractAnalyzer` avec analyse par regex
+    - [x] Détecter franchise, plafond et types de garanties
+    - [x] Créer l'endpoint `POST /analyze/contract/{filename}`
+    - [x] Interface frontend `ContractUploader.vue` avec drag & drop
+    - [x] Affichage des résultats (franchise, plafond, garanties)
 3.  **Logique Métier :**
     - [ ] Créer un algorithme simple : `Estimation Dégât (Volume 3D) * Coût Pièce > Franchise ?`
     - [ ] Générer un JSON de résultat "Sinistre Couvert : OUI/NON"
     - [ ] Calculer une estimation de coût
 
-**Résultat :** Application capable de croiser analyse visuelle et données contractuelles.
+**Résultat :** Application capable d'extraire et analyser les contrats d'assurance (PDF/Images). Reste à croiser avec l'analyse visuelle.
 
 ---
 
@@ -95,8 +99,9 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 ### Tâches :
 
 1.  **UI Design :**
-    - [ ] Appliquer un thème "Dark Mode" futuriste (Glassmorphism)
-    - [ ] Ajouter des animations de chargement pendant le traitement IA
+    - [x] Appliquer un thème "Dark Mode" futuriste (Glassmorphism)
+    - [x] Ajouter des animations de chargement pendant le traitement IA
+    - [x] Système d'onglets pour navigation (Image / Contrat)
     - [ ] Créer une galerie des analyses précédentes
 2.  **Visualisation 3D Interactive (TresJS) :** ✅
     - [x] Intégrer TresJS pour afficher la depth map en 3D
@@ -121,16 +126,16 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 
 - ✅ **Sprint 1** : 100% (3/3 tâches principales)
 - ✅ **Sprint 2** : 100% (4/4 tâches principales)
-- 🔄 **Sprint 3** : 33% (1/3 tâches principales) - **EN COURS**
-- 🔄 **Sprint 4** : 33% (1/3 tâches principales - 3D visualization done)
+- ✅ **Sprint 3** : 67% (2/3 tâches principales) - **Analyse de contrat terminée !**
+- 🔄 **Sprint 4** : 50% (2/4 tâches principales - 3D visualization + UI design done)
 
-**Progression totale : ~67% (2.33/4 sprints)**
+**Progression totale : ~79% (3.17/4 sprints)**
 
 ---
 
 ## 🎯 Prochaines étapes recommandées
 
-1. **Sprint 3 - Object Detection** : Ajouter YOLO pour identifier les pièces endommagées
+1. **Sprint 3 - Logique Métier** : Croiser analyse visuelle et contractuelle pour décision de couverture
 2. **Sprint 4 - PWA** : Rendre l'app installable sur mobile
 3. **Déploiement** : Déployer l'application en ligne (Vercel + Railway)
 

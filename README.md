@@ -40,24 +40,31 @@ DamageControl AI est une Progressive Web App (PWA) révolutionnaire qui automati
     - Statistiques de détection
 
 5.  **Zero-Shot Object Detection (OWL-ViT)** 🧩
+
     - Détection de pièces spécifiques sans entraînement
     - Modèle : OWL-ViT (Google)
     - Détecte : bumper, door, wheel, tire, headlight, hood, etc.
     - Requêtes textuelles personnalisables
 
+6.  **Analyse de Contrat (NLP)** 📄
+    - Upload de contrats d'assurance (PDF/Images)
+    - Extraction automatique de texte (PyPDF2 + Tesseract OCR)
+    - Analyse par regex pour détecter :
+      - Franchises
+      - Plafonds de garantie
+      - Types de garanties (Vol, Incendie, Bris de glace, etc.)
+    - Interface dédiée avec visualisation des résultats
+
 ### 🔄 À Venir (Sprint 3 & 4)
 
-6.  **Analyse de Contrat (NLP)** 📄
-    - Extraction automatique des franchises et garanties depuis des PDF
-    - Table Question Answering avec TAPAS
 7.  **Logique Métier** 🧠
     - Croisement des données visuelles et contractuelles
     - Estimation immédiate : "Sinistre Couvert : OUI/NON"
     - Calcul automatique du coût estimé
 8.  **UI/UX Premium** 🎨
-    - Dark mode futuriste avec glassmorphism
     - Galerie des analyses précédentes
     - PWA (installable sur mobile)
+    - Optimisations performances
 
 ## 🛠 Stack Technique
 

@@ -53,23 +53,108 @@ async def upload_image(file: UploadFile = File(...)):
     file_path = UPLOAD_DIR / unique_filename
 
     # Sauvegarder le fichier
-    try:
-        with file_path.open("wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-    except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Erreur lors de la sauvegarde: {str(e)}"
-        )
+    with file_path.open("wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
 
     return {
+        "status": "success",
         "filename": unique_filename,
-        "original_filename": file.filename,
-        "size": file_path.stat().st_size,
-        "path": str(file_path),
         "url": f"/files/{unique_filename}",
+        "size": file_path.stat().st_size,
         "uploaded_at": datetime.now().isoformat(),
-        "message": "Image uploadée avec succès",
     }
+
+
+@app.post("/upload/contract")
+async def upload_contract(file: UploadFile = File(...)):
+    """
+    Upload un contrat d'assurance (PDF ou image) pour extraction de texte
+    """
+    from services.contract_extractor import get_contract_extractor
+
+    # Vérifier le type de fichier
+    allowed_types = ["application/pdf", "image/jpeg", "image/png", "image/jpg"]
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=400,
+            detail="Le fichier doit être un PDF ou une image (JPG, PNG)",
+        )
+
+    # Générer un nom de fichier unique
+    file_extension = Path(file.filename).suffix
+    unique_filename = f"contract_{uuid.uuid4()}{file_extension}"
+    file_path = UPLOAD_DIR / unique_filename
+
+    try:
+        # Sauvegarder le fichier
+        with file_path.open("wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        print(f"📄 Contrat uploadé: {unique_filename}")
+
+        # Extraire le texte
+        extractor = get_contract_extractor()
+        extraction_result = extractor.extract_text(file_path)
+
+        return {
+            "status": "success",
+            "filename": unique_filename,
+            "url": f"/files/{unique_filename}",
+            "size": file_path.stat().st_size,
+            "uploaded_at": datetime.now().isoformat(),
+            "extraction": extraction_result,
+            "message": "Contrat uploadé et texte extrait avec succès",
+        }
+    except Exception as e:
+        # Supprimer le fichier en cas d'erreur
+        if file_path.exists():
+            file_path.unlink()
+        print(f"❌ Erreur lors de l'upload du contrat: {e}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de l'extraction: {str(e)}"
+        )
+
+
+@app.post("/analyze/contract/{filename}")
+async def analyze_contract(filename: str):
+    """
+    Analyse un contrat uploadé pour extraire franchise, plafond et garanties
+    """
+    from services.contract_extractor import get_contract_extractor
+    from services.contract_analyzer import get_contract_analyzer
+
+    file_path = UPLOAD_DIR / filename
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Contrat non trouvé")
+
+    try:
+        print(f"📋 Début de l'analyse du contrat: {filename}")
+
+        # Extraire le texte
+        extractor = get_contract_extractor()
+        extraction_result = extractor.extract_text(file_path)
+
+        # Analyser le contrat
+        analyzer = get_contract_analyzer()
+        analysis_result = analyzer.analyze_contract(extraction_result["text"])
+
+        print(f"✓ Analyse terminée")
+
+        return {
+            "status": "success",
+            "filename": filename,
+            "extraction": extraction_result,
+            "analysis": analysis_result,
+            "message": "Analyse du contrat terminée",
+        }
+    except Exception as e:
+        print("❌ ERREUR lors de l'analyse du contrat:")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de l'analyse: {str(e)}"
+        )
 
 
 @app.post("/analyze/{filename}")
