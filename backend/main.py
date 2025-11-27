@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime
 import traceback
 from services.depth_estimator import get_depth_estimator
+from services.object_detector import get_object_detector
 
 app = FastAPI(title="DamageControl AI API")
 
@@ -106,4 +107,42 @@ async def analyze_image(filename: str):
         print(traceback.format_exc())
         raise HTTPException(
             status_code=500, detail=f"Erreur lors de l'analyse: {str(e)}"
+        )
+
+
+@app.post("/detect/{filename}")
+async def detect_objects(filename: str):
+    """
+    Détecte les objets dans une image uploadée avec YOLO
+    """
+    file_path = UPLOAD_DIR / filename
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Image non trouvée")
+
+    try:
+        print(f"🔍 Début de la détection d'objets pour: {filename}")
+
+        # Obtenir le détecteur d'objets
+        detector = get_object_detector()
+        print("✓ Détecteur obtenu")
+
+        # Détecter les objets
+        result = detector.detect_objects(file_path)
+        print(f"✓ {result['stats']['total_objects']} objets détectés")
+
+        return {
+            "status": "success",
+            "original_image": f"/files/{filename}",
+            "annotated_image": f"/files/{result['annotated_image_filename']}",
+            "detections": result["detections"],
+            "stats": result["stats"],
+            "message": "Détection d'objets terminée",
+        }
+    except Exception as e:
+        # Afficher l'erreur complète dans les logs
+        print("❌ ERREUR lors de la détection:")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de la détection: {str(e)}"
         )

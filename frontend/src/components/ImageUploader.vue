@@ -7,9 +7,11 @@ const API_URL = 'http://127.0.0.1:8000'
 const isDragging = ref(false)
 const isUploading = ref(false)
 const isAnalyzing = ref(false)
+const isDetecting = ref(false)
 const uploadedImage = ref(null)
 const uploadResult = ref(null)
 const analysisResult = ref(null)
+const detectionResult = ref(null)
 const errorMessage = ref(null)
 
 const handleDragOver = (e) => {
@@ -106,10 +108,35 @@ const analyzeDepth = async () => {
   }
 }
 
+const detectObjects = async () => {
+  if (!uploadResult.value) return
+
+  isDetecting.value = true
+  errorMessage.value = null
+
+  try {
+    const response = await fetch(`${API_URL}/detect/${uploadResult.value.filename}`, {
+      method: 'POST'
+    })
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la détection')
+    }
+
+    const data = await response.json()
+    detectionResult.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+  } finally {
+    isDetecting.value = false
+  }
+}
+
 const reset = () => {
   uploadedImage.value = null
   uploadResult.value = null
   analysisResult.value = null
+  detectionResult.value = null
   errorMessage.value = null
 }
 </script>
