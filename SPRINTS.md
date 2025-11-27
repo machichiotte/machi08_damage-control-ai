@@ -83,12 +83,16 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
     - [x] Créer l'endpoint `POST /analyze/contract/{filename}`
     - [x] Interface frontend `ContractUploader.vue` avec drag & drop
     - [x] Affichage des résultats (franchise, plafond, garanties)
-3.  **Logique Métier :**
-    - [ ] Créer un algorithme simple : `Estimation Dégât (Volume 3D) * Coût Pièce > Franchise ?`
-    - [ ] Générer un JSON de résultat "Sinistre Couvert : OUI/NON"
-    - [ ] Calculer une estimation de coût
+3.  **Logique Métier :** ✅
+    - [x] Créer le service `ClaimEvaluator` pour évaluer la couverture
+    - [x] Créer l'endpoint `POST /evaluate/claim`
+    - [x] Croiser les dégâts détectés avec les garanties du contrat
+    - [x] Calculer le coût estimé basé sur les pièces détectées
+    - [x] Générer la décision "Sinistre Couvert : OUI/NON"
+    - [x] Calculer le remboursement (coût - franchise)
+    - [x] Interface frontend `ClaimEvaluator.vue` avec résultats détaillés
 
-**Résultat :** Application capable d'extraire et analyser les contrats d'assurance (PDF/Images). Reste à croiser avec l'analyse visuelle.
+**Résultat :** Application complète capable d'analyser les dégâts, extraire les garanties contractuelles, et décider automatiquement de la couverture du sinistre !
 
 ---
 
@@ -126,17 +130,17 @@ Ce document détaille la roadmap pour passer de l'idée au MVP (Minimum Viable P
 
 - ✅ **Sprint 1** : 100% (3/3 tâches principales)
 - ✅ **Sprint 2** : 100% (4/4 tâches principales)
-- ✅ **Sprint 3** : 67% (2/3 tâches principales) - **Analyse de contrat terminée !**
+- ✅ **Sprint 3** : 100% (3/3 tâches principales) - **TERMINÉ !**
 - 🔄 **Sprint 4** : 50% (2/4 tâches principales - 3D visualization + UI design done)
 
-**Progression totale : ~79% (3.17/4 sprints)**
+**Progression totale : ~88% (3.5/4 sprints)**
 
 ---
 
 ## 🎯 Prochaines étapes recommandées
 
-1. **Sprint 3 - Logique Métier** : Croiser analyse visuelle et contractuelle pour décision de couverture
-2. **Sprint 4 - PWA** : Rendre l'app installable sur mobile
+1. **Sprint 4 - PWA** : Rendre l'app installable sur mobile
+2. **Sprint 4 - Galerie** : Ajouter une galerie des analyses précédentes
 3. **Déploiement** : Déployer l'application en ligne (Vercel + Railway)
 
-Le projet a déjà une base solide et impressionnante pour un portfolio !
+Le projet est maintenant fonctionnel de bout en bout ! 🎉

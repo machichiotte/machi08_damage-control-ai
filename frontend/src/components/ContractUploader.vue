@@ -42,6 +42,18 @@
         <!-- Résultats de l'analyse -->
         <div v-if="analysisResult" class="analysis-results">
             <h3>✅ Analyse terminée</h3>
+            
+            <!-- Nom du fichier -->
+            <div class="filename-card">
+                <span class="icon">📄</span>
+                <div class="filename-info">
+                    <p class="label">Fichier analysé</p>
+                    <p class="filename">{{ analysisResult.filename }}</p>
+                </div>
+                <button @click="copyFilename" class="copy-btn" title="Copier le nom du fichier">
+                    📋
+                </button>
+            </div>
 
             <!-- Franchise -->
             <div class="result-card">
@@ -220,6 +232,17 @@ const reset = () => {
     error.value = null
     if (fileInput.value) {
         fileInput.value.value = ''
+    }
+}
+
+const copyFilename = async () => {
+    if (analysisResult.value?.filename) {
+        try {
+            await navigator.clipboard.writeText(analysisResult.value.filename)
+            alert('Nom du fichier copié !')
+        } catch (err) {
+            console.error('Erreur lors de la copie:', err)
+        }
     }
 }
 
@@ -416,6 +439,57 @@ h2 {
     color: #48bb78;
     margin-bottom: 1.5rem;
     text-align: center;
+}
+
+.filename-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.filename-card .icon {
+    font-size: 2rem;
+}
+
+.filename-info {
+    flex: 1;
+}
+
+.filename-info .label {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filename-info .filename {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #667eea;
+    font-family: 'Courier New', monospace;
+}
+
+.copy-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: #5568d3;
+    transform: scale(1.05);
 }
 
 .result-card {

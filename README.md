@@ -47,6 +47,7 @@ DamageControl AI est une Progressive Web App (PWA) révolutionnaire qui automati
     - Requêtes textuelles personnalisables
 
 6.  **Analyse de Contrat (NLP)** 📄
+
     - Upload de contrats d'assurance (PDF/Images)
     - Extraction automatique de texte (PyPDF2 + Tesseract OCR)
     - Analyse par regex pour détecter :
@@ -55,12 +56,15 @@ DamageControl AI est une Progressive Web App (PWA) révolutionnaire qui automati
       - Types de garanties (Vol, Incendie, Bris de glace, etc.)
     - Interface dédiée avec visualisation des résultats
 
-### 🔄 À Venir (Sprint 3 & 4)
+7.  **Logique Métier (Évaluation de Sinistre)** 🧠
+    - Service `ClaimEvaluator` pour croiser analyse visuelle et contractuelle
+    - Calcul automatique du coût estimé basé sur les pièces détectées
+    - Décision automatique : "Sinistre Couvert : OUI/NON"
+    - Calcul du remboursement (coût estimé - franchise)
+    - Interface complète avec détails financiers et dégâts détectés
 
-7.  **Logique Métier** 🧠
-    - Croisement des données visuelles et contractuelles
-    - Estimation immédiate : "Sinistre Couvert : OUI/NON"
-    - Calcul automatique du coût estimé
+### 🔄 À Venir (Sprint 4)
+
 8.  **UI/UX Premium** 🎨
     - Galerie des analyses précédentes
     - PWA (installable sur mobile)

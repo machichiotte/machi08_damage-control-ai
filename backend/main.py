@@ -8,6 +8,10 @@ from datetime import datetime
 import traceback
 from services.depth_estimator import get_depth_estimator
 from services.object_detector import get_object_detector
+from services.zero_shot_detector import get_zero_shot_detector
+from services.contract_extractor import get_contract_extractor
+from services.contract_analyzer import get_contract_analyzer
+from services.claim_evaluator import get_claim_evaluator
 
 app = FastAPI(title="DamageControl AI API")
 
@@ -269,4 +273,82 @@ async def detect_parts(filename: str):
         print(traceback.format_exc())
         raise HTTPException(
             status_code=500, detail=f"Erreur lors de la détection: {str(e)}"
+        )
+
+
+@app.post("/evaluate/claim")
+async def evaluate_claim(
+    image_filename: str, contract_filename: str, damage_type: str = "accident"
+):
+    """
+    Évalue si un sinistre est couvert par le contrat
+
+    Args:
+        image_filename: Nom du fichier image analysé
+        contract_filename: Nom du fichier contrat analysé
+        damage_type: Type de sinistre (accident, vol, incendie, etc.)
+    """
+    try:
+        print(f"\n🔍 Évaluation du sinistre:")
+        print(f"  - Image: {image_filename}")
+        print(f"  - Contrat: {contract_filename}")
+        print(f"  - Type: {damage_type}")
+
+        # 1. Charger les données d'analyse d'image
+        image_path = UPLOAD_DIR / image_filename
+        if not image_path.exists():
+            raise HTTPException(status_code=404, detail="Image non trouvée")
+
+        # Récupérer les détections de pièces de voiture
+        detector = get_zero_shot_detector()
+        detection_result = detector.detect_parts(image_path)
+
+        # Récupérer les stats de profondeur (si disponibles)
+        depth_estimator = get_depth_estimator()
+        depth_result = depth_estimator.estimate_depth(image_path)
+
+        # Construire les données de dégâts
+        damage_data = {
+            "detected_objects": detection_result.get("detections", []),
+            "depth_stats": depth_result.get("stats", {}),
+        }
+
+        # 2. Charger les données du contrat
+        contract_path = UPLOAD_DIR / contract_filename
+        if not contract_path.exists():
+            raise HTTPException(status_code=404, detail="Contrat non trouvé")
+
+        # Extraire et analyser le contrat
+        extractor = get_contract_extractor()
+        extraction_result = extractor.extract_text(contract_path)
+
+        analyzer = get_contract_analyzer()
+        contract_data = analyzer.analyze_contract(extraction_result["text"])
+
+        # 3. Évaluer le sinistre
+        evaluator = get_claim_evaluator()
+        evaluation = evaluator.evaluate_claim(
+            damage_data=damage_data,
+            contract_data=contract_data,
+            damage_type=damage_type,
+        )
+
+        print(f"✅ Évaluation terminée")
+
+        return {
+            "status": "success",
+            "evaluation": evaluation,
+            "image_filename": image_filename,
+            "contract_filename": contract_filename,
+            "damage_type": damage_type,
+            "message": "Évaluation du sinistre terminée",
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print("❌ ERREUR lors de l'évaluation:")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de l'évaluation: {str(e)}"
         )

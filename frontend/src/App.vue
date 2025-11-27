@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import ImageUploader from './components/ImageUploader.vue'
 import ContractUploader from './components/ContractUploader.vue'
+import ClaimEvaluator from './components/ClaimEvaluator.vue'
 
 const activeTab = ref('image')
 </script>
@@ -11,7 +12,8 @@ const activeTab = ref('image')
     <!-- Header -->
     <div class="text-center mb-12">
       <h1
-        class="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 mb-4 animate-gradient">
+        class="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 mb-4 animate-gradient"
+        style="padding-bottom: 1rem;">
         DamageControl AI
       </h1>
       <p class="text-xl text-gray-400">L'Expert en Sinistres Automatisé</p>
@@ -41,11 +43,20 @@ const activeTab = ref('image')
       ]">
         📄 Analyser un contrat
       </button>
+      <button @click="activeTab = 'evaluate'" :class="[
+        'px-6 py-3 rounded-xl font-semibold transition-all',
+        activeTab === 'evaluate'
+          ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+          : 'bg-slate-800/50 text-gray-400 hover:bg-slate-700/50'
+      ]">
+        🔍 Évaluer le sinistre
+      </button>
     </div>
 
     <!-- Main Content -->
     <ImageUploader v-if="activeTab === 'image'" />
     <ContractUploader v-if="activeTab === 'contract'" />
+    <ClaimEvaluator v-if="activeTab === 'evaluate'" />
 
     <!-- Info Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-12">
