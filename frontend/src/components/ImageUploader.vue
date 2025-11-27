@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import DepthViewer3D from './DepthViewer3D.vue'
 
 const API_URL = 'http://127.0.0.1:8000'
 
@@ -211,6 +212,12 @@ const reset = () => {
               <span class="text-gray-400">Appareil utilisé :</span>
               <span class="uppercase">{{ analysisResult.device_used }}</span>
             </div>
+          </div>
+
+          <!-- Visualisation 3D Interactive -->
+          <div class="mt-6">
+            <h4 class="text-lg font-semibold mb-3 text-purple-400">🧊 Visualisation 3D Interactive</h4>
+            <DepthViewer3D :depthMapUrl="`${API_URL}${analysisResult.depth_map}`" :originalImageUrl="uploadedImage" />
           </div>
         </div>
       </div>

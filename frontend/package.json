@@ -9,16 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.4",
+    "@tresjs/cientos": "^3.9.0",
+    "@tresjs/core": "^3.9.0",
     "three": "^0.158.0",
-    "@tresjs/core": "^3.6.0",
-    "@tresjs/cientos": "^3.6.0"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
-    "vite": "^4.4.5",
-    "tailwindcss": "^3.3.3",
+    "autoprefixer": "^10.4.14",
     "postcss": "^8.4.27",
-    "autoprefixer": "^10.4.14"
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.4.5"
   }
 }
