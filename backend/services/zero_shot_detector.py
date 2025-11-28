@@ -77,9 +77,9 @@ class ZeroShotDetector:
             outputs = self.model(**inputs)
 
         # Post-processing pour obtenir les bounding boxes
-        # Threshold très bas pour maximiser les détections
+        # Threshold augmenté pour réduire les fausses détections
         results = self.processor.post_process_object_detection(
-            outputs=outputs, target_sizes=target_sizes.to(self.device), threshold=0.05
+            outputs=outputs, target_sizes=target_sizes.to(self.device), threshold=0.15
         )[0]
 
         # Préparer l'image pour annotation (OpenCV utilise BGR)
@@ -94,8 +94,8 @@ class ZeroShotDetector:
             score = round(score.item(), 3)
             label_text = text_queries[label]
 
-            # Filtrer les scores très faibles
-            if score < 0.05:
+            # Filtrer les scores faibles (augmenté de 0.05 à 0.1)
+            if score < 0.1:
                 continue
 
             x1, y1, x2, y2 = map(int, box)
@@ -129,6 +129,9 @@ class ZeroShotDetector:
                 }
             )
 
+        # Appliquer NMS pour éliminer les détections qui se chevauchent
+        detections = self._apply_nms(detections, iou_threshold=0.5)
+
         # Sauvegarder l'image annotée
         output_filename = f"parts_{image_path.name}"
         output_path = image_path.parent / output_filename
@@ -149,6 +152,68 @@ class ZeroShotDetector:
             "detections": detections,
             "stats": stats,
         }
+
+    def _apply_nms(self, detections: list, iou_threshold: float = 0.5) -> list:
+        """
+        Applique Non-Maximum Suppression pour éliminer les détections qui se chevauchent
+
+        Args:
+            detections: Liste des détections
+            iou_threshold: Seuil IoU pour considérer deux boxes comme chevauchantes
+
+        Returns:
+            Liste filtrée des détections
+        """
+        if len(detections) == 0:
+            return detections
+
+        # Trier par confiance décroissante
+        detections = sorted(detections, key=lambda x: x["confidence"], reverse=True)
+
+        filtered_detections = []
+
+        while detections:
+            # Prendre la détection avec la plus haute confiance
+            best = detections.pop(0)
+            filtered_detections.append(best)
+
+            # Filtrer les détections qui se chevauchent trop avec celle-ci
+            detections = [
+                det
+                for det in detections
+                if self._calculate_iou(best["bbox"], det["bbox"]) < iou_threshold
+            ]
+
+        return filtered_detections
+
+    def _calculate_iou(self, box1: dict, box2: dict) -> float:
+        """
+        Calcule l'Intersection over Union (IoU) entre deux bounding boxes
+
+        Args:
+            box1, box2: Dictionnaires avec x1, y1, x2, y2
+
+        Returns:
+            IoU score entre 0 et 1
+        """
+        # Coordonnées de l'intersection
+        x1 = max(box1["x1"], box2["x1"])
+        y1 = max(box1["y1"], box2["y1"])
+        x2 = min(box1["x2"], box2["x2"])
+        y2 = min(box1["y2"], box2["y2"])
+
+        # Aire de l'intersection
+        intersection = max(0, x2 - x1) * max(0, y2 - y1)
+
+        # Aires des deux boxes
+        area1 = (box1["x2"] - box1["x1"]) * (box1["y2"] - box1["y1"])
+        area2 = (box2["x2"] - box2["x1"]) * (box2["y2"] - box2["y1"])
+
+        # Union
+        union = area1 + area2 - intersection
+
+        # IoU
+        return intersection / union if union > 0 else 0
 
 
 # Instance globale
