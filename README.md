@@ -2,6 +2,14 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-machichiotte%2Fdamage--control--ai-blue?logo=github)](https://github.com/machichiotte/damage-control-ai)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR_SITE_ID/deploy-status)](https://app.netlify.com/sites/damage-control-ai/deploys)
+
+## 🌐 Démo en Ligne
+
+🚀 **Application** : [https://damage-control-ai.netlify.app](https://damage-control-ai.netlify.app)  
+📚 **Documentation API** : [https://damage-control-ai-backend.onrender.com/docs](https://damage-control-ai-backend.onrender.com/docs)
+
+> ⚠️ **Note** : Le backend (plan gratuit Render) s'endort après 15 min d'inactivité. Premier chargement : ~30 secondes.
 
 ## 🎯 Concept
 

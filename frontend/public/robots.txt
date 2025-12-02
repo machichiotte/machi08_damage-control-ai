@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://damage-control-ai.netlify.app/sitemap.xml

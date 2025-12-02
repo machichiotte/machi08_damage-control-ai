@@ -1,0 +1,45 @@
+<svg id="icon-512" width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <!-- Gradient Background -->
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: #667eea; stop-opacity: 1"/>
+                <stop offset="100%" style="stop-color: #764ba2; stop-opacity: 1"/>
+              </linearGradient>
+              <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: #48bb78; stop-opacity: 1"/>
+                <stop offset="100%" style="stop-color: #38a169; stop-opacity: 1"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Background Circle -->
+            <circle cx="256" cy="256" r="240" fill="url(#grad1)"/>
+
+            <!-- Shield Shape -->
+            <path d="M256 100 L380 140 L380 260 Q380 340 256 400 Q132 340 132 260 L132 140 Z" fill="white" opacity="0.95"/>
+
+            <!-- Car Silhouette -->
+            <g transform="translate(256, 256)">
+              <!-- Car Body -->
+              <path d="M-60,-20 L-50,-40 L-20,-50 L20,-50 L50,-40 L60,-20 L60,20 L-60,20 Z" fill="url(#grad1)"/>
+              <!-- Windows -->
+              <path d="M-45,-35 L-25,-45 L-5,-45 L-5,-25 L-45,-25 Z" fill="#1a202c" opacity="0.3"/>
+              <path d="M5,-45 L25,-45 L45,-35 L45,-25 L5,-25 Z" fill="#1a202c" opacity="0.3"/>
+              <!-- Wheels -->
+              <circle cx="-35" cy="25" r="12" fill="#2d3748"/>
+              <circle cx="35" cy="25" r="12" fill="#2d3748"/>
+              <circle cx="-35" cy="25" r="6" fill="#4a5568"/>
+              <circle cx="35" cy="25" r="6" fill="#4a5568"/>
+            </g>
+
+            <!-- AI Circuit Pattern -->
+            <g opacity="0.3">
+              <circle cx="150" cy="150" r="4" fill="white"/>
+              <circle cx="362" cy="150" r="4" fill="white"/>
+              <circle cx="150" cy="362" r="4" fill="white"/>
+              <circle cx="362" cy="362" r="4" fill="white"/>
+              <line x1="150" y1="150" x2="200" y2="200" stroke="white" stroke-width="2"/>
+              <line x1="362" y1="150" x2="312" y2="200" stroke="white" stroke-width="2"/>
+              <line x1="150" y1="362" x2="200" y2="312" stroke="white" stroke-width="2"/>
+              <line x1="362" y1="362" x2="312" y2="312" stroke="white" stroke-width="2"/>
+            </g>
+          </svg>

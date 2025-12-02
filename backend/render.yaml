@@ -9,3 +9,5 @@ services:
         value: 3.9.18
       - key: PORT
         value: 10000
+      - key: FRONTEND_URL
+        value: https://damage-control-ai.netlify.app
