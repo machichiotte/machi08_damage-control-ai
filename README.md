@@ -1,116 +1,119 @@
-# DamageControl AI - L'Expert en Sinistres Automatisé
+# DamageControl AI - Automated Claims Expert
 
 [![GitHub](https://img.shields.io/badge/GitHub-machichiotte%2Fdamage--control--ai-blue?logo=github)](https://github.com/machichiotte/damage-control-ai)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR_SITE_ID/deploy-status)](https://app.netlify.com/sites/damage-control-ai/deploys)
 
-## 🌐 Démo en Ligne
+## 🌐 Live Demo
 
-🚀 **Application** : [https://damage-control-ai.netlify.app](https://damage-control-ai.netlify.app)  
-📚 **Documentation API** : [https://damage-control-ai-backend.onrender.com/docs](https://damage-control-ai-backend.onrender.com/docs)
+🚀 **Application**: [https://damage-control-ai.netlify.app](https://damage-control-ai.netlify.app)  
+📚 **API Documentation**: [https://machichiotte-damage-control-ai-backend.hf.space/docs](https://machichiotte-damage-control-ai-backend.hf.space/docs)
 
-> ⚠️ **Note** : Le backend (plan gratuit Render) s'endort après 15 min d'inactivité. Premier chargement : ~30 secondes.
+> 💡 **Infrastructure**: Frontend hosted on Netlify, Backend on Hugging Face Spaces (16 GB RAM).
 
-## 🎯 Concept
+## 🎯 Overview
 
-DamageControl AI est une Progressive Web App (PWA) révolutionnaire qui automatise l'évaluation des dommages automobiles et domestiques. En utilisant l'intelligence artificielle pour l'analyse d'images (profondeur, segmentation, détection) et le traitement du langage naturel (analyse de contrats), elle accélère le processus de déclaration de sinistre (FNOL) et réduit la fraude.
+DamageControl AI is a Progressive Web App that automates automotive damage assessment. Using artificial intelligence for image analysis (3D depth, object detection) and document processing (contract analysis), the application streamlines the claims declaration process.
 
-## ✨ Fonctionnalités Actuelles
+## ✨ Current Features
 
-### ✅ Implémenté
+### ✅ Implemented
 
-1.  **Upload d'Images Interactif** 📸
+1. **Interactive Image Upload** 📸
 
-    - Drag & drop ou sélection de fichier
-    - Prévisualisation instantanée
-    - Interface moderne avec animations
+   - Drag & drop or file selection
+   - Instant preview
+   - Animated interface with transitions
 
-2.  **Depth Estimation (Vision 3D)** 🎯
+2. **Depth Estimation (3D Vision)** 🎯
 
-    - Analyse de la gravité des impacts via des cartes de profondeur
-    - Modèle IA : Depth Anything (Hugging Face)
-    - Visualisation côte à côte (original vs depth map)
-    - Statistiques de profondeur (min/max/moyenne)
-    - Colormap INFERNO pour meilleure lisibilité
+   - Impact severity analysis via depth maps
+   - AI Model: Depth Anything (Hugging Face)
+   - Side-by-side visualization (original vs depth map)
+   - Depth statistics (min/max/average)
+   - INFERNO colormap for better readability
 
-3.  **Visualisation 3D Interactive** 🧊
+3. **Interactive 3D Visualization** 🧊
 
-    - Affichage 3D de la depth map avec TresJS
-    - Rotation automatique et manuelle (OrbitControls)
-    - Zoom et pan interactifs
-    - Displacement mapping pour relief 3D réel
+   - 3D depth map display with TresJS
+   - Automatic and manual rotation (OrbitControls)
+   - Interactive zoom and pan
+   - Displacement mapping for real 3D relief
 
-4.  **Object Detection (YOLO)** 🔍
+4. **Object Detection (YOLO)** 🔍
 
-    - Détection d'objets génériques (voitures, personnes, camions)
-    - Modèle : YOLOv8 nano
-    - Bounding boxes avec scores de confiance
-    - Statistiques de détection
+   - Generic object detection (cars, people, trucks)
+   - Model: YOLOv8 nano
+   - Bounding boxes with confidence scores
+   - Detection statistics
 
-5.  **Zero-Shot Object Detection (OWL-ViT)** 🧩
+5. **Zero-Shot Object Detection (OWL-ViT)** 🧩
 
-    - Détection de pièces spécifiques sans entraînement
-    - Modèle : OWL-ViT (Google)
-    - Détecte : bumper, door, wheel, tire, headlight, hood, etc.
-    - Requêtes textuelles personnalisables
+   - Specific part detection without training
+   - Model: OWL-ViT (Google)
+   - Detects: bumper, door, wheel, tire, headlight, hood, etc.
+   - Customizable text queries
 
-6.  **Analyse de Contrat (NLP)** 📄
+6. **Contract Analysis (NLP)** 📄
 
-    - Upload de contrats d'assurance (PDF/Images)
-    - Extraction automatique de texte (PyPDF2 + Tesseract OCR)
-    - Analyse par regex pour détecter :
-      - Franchises
-      - Plafonds de garantie
-      - Types de garanties (Vol, Incendie, Bris de glace, etc.)
-    - Interface dédiée avec visualisation des résultats
+   - Insurance contract upload (PDF/Images)
+   - Automatic text extraction (PyPDF2 + Tesseract OCR)
+   - Regex analysis to detect:
+     - Deductibles
+     - Coverage limits
+     - Coverage types (Theft, Fire, Glass breakage, etc.)
+   - Dedicated interface with results visualization
 
-7.  **Logique Métier (Évaluation de Sinistre)** 🧠
-    - Service `ClaimEvaluator` pour croiser analyse visuelle et contractuelle
-    - Calcul automatique du coût estimé basé sur les pièces détectées
-    - Décision automatique : "Sinistre Couvert : OUI/NON"
-    - Calcul du remboursement (coût estimé - franchise)
-    - Interface complète avec détails financiers et dégâts détectés
+7. **Business Logic (Claim Evaluation)** 🧠
+   - `ClaimEvaluator` service to cross-reference visual and contractual analysis
+   - Automatic cost estimation based on detected parts
+   - Automatic decision: "Claim Covered: YES/NO"
+   - Reimbursement calculation (estimated cost - deductible)
+   - Complete interface with financial details and detected damages
 
-### 🔄 En Cours (Sprint 4 - 50%)
+### 🔄 In Progress (Sprint 4 - 50%)
 
-8.  **UI/UX Premium** 🎨
-    - [x] Design Dark Mode futuriste avec Glassmorphism
-    - [x] Animations de chargement pendant le traitement IA
-    - [x] Système d'onglets pour navigation (Image / Contrat)
-    - [ ] Galerie des analyses précédentes
-    - [ ] PWA (installable sur mobile)
-    - [ ] Optimisations performances
+8. **Polished UI/UX** 🎨
+   - [x] Dark Mode design with Glassmorphism
+   - [x] Loading animations during AI processing
+   - [x] Tab system for navigation (Image / Contract)
+   - [ ] Gallery of previous analyses
+   - [ ] PWA (installable on mobile)
+   - [ ] Performance optimizations
 
-## 🛠 Stack Technique
+## 🛠 Tech Stack
 
-- **Frontend** : Vue.js 3 (Vite) + TailwindCSS + TresJS
-- **Backend** : Python (FastAPI)
-- **IA/ML** : Hugging Face Transformers + Ultralytics
+- **Frontend**: Vue.js 3 (Vite) + TailwindCSS + TresJS
+- **Backend**: Python (FastAPI)
+- **AI/ML**: Hugging Face Transformers + Ultralytics
   - Depth Anything (depth estimation) ✅
   - YOLOv8 (object detection) ✅
   - OWL-ViT (zero-shot detection) ✅
-  - TAPAS (table QA) 🔄
-- **Stockage** : Local (fichiers) pour le développement
-- **Déploiement** : Prévu sur Vercel (frontend) + Railway (backend)
+- **Storage**: Local (files) for development
+- **Deployment**: Netlify (frontend) + Hugging Face Spaces (backend)
 
-## 📂 Structure du Projet
+## 📂 Project Structure
 
 ```
 /damage_control_ai
-├── /frontend          # Application Vue.js
+├── /frontend          # Vue.js application
 │   ├── /src
 │   │   ├── /components
-│   │   │   ├── ImageUploader.vue    # Composant d'upload
-│   │   │   └── DepthViewer3D.vue    # Visualisation 3D
+│   │   │   ├── ImageUploader.vue      # Upload component
+│   │   │   ├── ContractUploader.vue   # Contract upload
+│   │   │   ├── ClaimEvaluator.vue     # Claim evaluation
+│   │   │   └── DepthViewer3D.vue      # 3D visualization
 │   │   ├── App.vue
 │   │   └── main.js
 │   └── package.json
-├── /backend           # API FastAPI
-│   ├── main.py        # Endpoints REST
+├── /backend           # FastAPI API
+│   ├── main.py        # REST endpoints
 │   ├── /services
-│   │   ├── depth_estimator.py       # Depth Anything
-│   │   ├── object_detector.py       # YOLO
-│   │   └── zero_shot_detector.py    # OWL-ViT
+│   │   ├── depth_estimator.py         # Depth Anything
+│   │   ├── object_detector.py         # YOLO
+│   │   ├── zero_shot_detector.py      # OWL-ViT
+│   │   ├── contract_analyzer.py       # Contract analysis
+│   │   └── claim_evaluator.py         # Claim evaluation
 │   └── requirements.txt
 └── /docs              # Documentation
     ├── ARCHITECTURE.md
@@ -118,17 +121,17 @@ DamageControl AI est une Progressive Web App (PWA) révolutionnaire qui automati
     └── SETUP.md
 ```
 
-## 🏁 Démarrage Rapide
+## 🏁 Quick Start
 
-### Prérequis
+### Prerequisites
 
 - Node.js 18+
 - Python 3.9+
-- ~4GB d'espace disque (modèles IA)
+- ~4GB disk space (AI models)
 
 ### Installation
 
-**Frontend :**
+**Frontend:**
 
 ```bash
 cd frontend
@@ -136,9 +139,9 @@ npm install
 npm run dev
 ```
 
-👉 Frontend accessible sur http://localhost:5173
+👉 Frontend accessible at http://localhost:5173
 
-**Backend :**
+**Backend:**
 
 ```bash
 cd backend
@@ -146,57 +149,66 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-👉 Backend accessible sur http://127.0.0.1:8000
+👉 Backend accessible at http://127.0.0.1:8000
 
-⚠️ **Note :** Au premier lancement, les modèles IA seront téléchargés :
+⚠️ **Note:** On first launch, AI models will be downloaded:
 
 - Depth Anything (~400MB)
 - YOLOv8 nano (~6MB)
 - OWL-ViT (~600MB)
 
-### Documentation API
+### API Documentation
 
-Documentation interactive Swagger : http://127.0.0.1:8000/docs
+Interactive Swagger documentation: http://127.0.0.1:8000/docs
 
-## 🎨 Captures d'écran
+## 📊 Project Progress
 
-_(À venir : Screenshots de l'interface et des depth maps)_
+- ✅ **Sprint 1**: Foundations & Infrastructure (100%)
+- ✅ **Sprint 2**: Vision & 3D - Depth Estimation (100%)
+- ✅ **Sprint 3**: Contract Intelligence (100%)
+- 🔄 **Sprint 4**: Polished UI/UX & Finalization (50%)
 
-## 📊 Progression du Projet
+**Total progress: ~88%**
 
-- ✅ **Sprint 1** : Fondations & Infrastructure (100%)
-- ✅ **Sprint 2** : Vision & 3D - Depth Estimation (100%)
-- ✅ **Sprint 3** : Intelligence Contractuelle (100%)
-- 🔄 **Sprint 4** : UI/UX Premium & Finalisation (50%)
-
-**Progression totale : ~88%**
-
-Voir [SPRINTS.md](./SPRINTS.md) pour plus de détails.
+See [SPRINTS.md](./SPRINTS.md) for more details.
 
 ## 📖 Documentation
 
-- [Architecture](./ARCHITECTURE.md) - Détails techniques et choix d'architecture
-- [Sprints](./SPRINTS.md) - Planification et roadmap du projet
-- [Setup](./SETUP.md) - Guide d'installation détaillé
+- [Architecture](./ARCHITECTURE.md) - Technical details and architecture choices
+- [Sprints](./SPRINTS.md) - Project planning and roadmap
+- [Setup](./SETUP.md) - Detailed installation guide
 
-## 🎯 Pourquoi ce projet ?
+## 🔧 Technical Highlights
 
-Ce projet démontre des compétences avancées en :
+**Architecture**:
 
-- **Full-Stack Development** : Vue.js + Python/FastAPI
-- **Intelligence Artificielle** : Intégration de modèles Hugging Face
-- **Computer Vision** : Depth Estimation (top 1% des développeurs)
-- **UX/UI moderne** : Design premium avec Tailwind
-- **Architecture propre** : Services, API REST, gestion d'état
+- Microservices architecture with separated frontend/backend
+- RESTful API with FastAPI
+- Real-time health monitoring
+- Docker containerization
 
-## 🤝 Contribution
+**AI/ML Integration**:
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+- Multiple transformer models (Depth Anything, OWL-ViT)
+- YOLO for real-time object detection
+- OCR with Tesseract for document processing
+- Custom business logic for claim evaluation
+
+**Frontend**:
+
+- Vue 3 Composition API
+- 3D rendering with Three.js (TresJS)
+- Responsive design with TailwindCSS
+- Progressive Web App capabilities
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open an issue or pull request.
 
 ## 📝 License
 
-MIT License - voir [LICENSE](./LICENSE)
+MIT License - see [LICENSE](./LICENSE)
 
 ---
 
-**Développé par** [@machichiotte](https://github.com/machichiotte) | **2025**
+**Developed by** [@machichiotte](https://github.com/machichiotte) | **2025**

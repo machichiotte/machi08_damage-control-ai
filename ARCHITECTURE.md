@@ -278,6 +278,30 @@ User → Frontend → POST /evaluate/claim → Backend
 - GPU pour l'inférence
 - Cache Redis pour les résultats
 
+### Infrastructure Actuelle (Production) :
+
+**Frontend** :
+
+- Plateforme : Netlify
+- Build : Vite (Vue.js 3)
+- CDN : Global (Netlify Edge)
+- Déploiement : Automatique via GitHub
+
+**Backend** :
+
+- Plateforme : Hugging Face Spaces
+- Runtime : Docker (Python 3.9)
+- RAM : 16 GB
+- Modèles IA : Depth Anything, YOLOv8, OWL-ViT
+- API : FastAPI avec documentation Swagger
+
+**Avantages** :
+
+- Infrastructure 100% gratuite
+- Backend toujours actif (pas de sommeil)
+- RAM suffisante pour tous les modèles IA
+- Déploiement automatisé
+
 ### Phase 3 (Scale) :
 
 - Microservices (service par modèle IA)
