@@ -130,6 +130,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { API_URL } from '../config.js'
 
 const isDragging = ref(false)
 const contractFile = ref(null)
@@ -197,7 +198,7 @@ const analyzeContract = async () => {
         const formData = new FormData()
         formData.append('file', contractFile.value)
 
-        const uploadResponse = await fetch('http://127.0.0.1:8000/upload/contract', {
+        const uploadResponse = await fetch(`${API_URL}/upload/contract`, {
             method: 'POST',
             body: formData
         })
@@ -210,7 +211,7 @@ const analyzeContract = async () => {
 
         // 2. Analyse du contrat
         const analyzeResponse = await fetch(
-            `http://127.0.0.1:8000/analyze/contract/${uploadData.filename}`,
+            `${API_URL}/analyze/contract/${uploadData.filename}`,
             { method: 'POST' }
         )
 

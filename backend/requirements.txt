@@ -3,7 +3,7 @@ uvicorn[standard]
 python-multipart
 pillow
 numpy
-opencv-python
+opencv-python-headless
 python-dotenv
 aiofiles
 
@@ -12,3 +12,8 @@ torch
 torchvision
 transformers
 timm
+ultralytics
+
+# Contract Analysis
+PyPDF2
+pytesseract

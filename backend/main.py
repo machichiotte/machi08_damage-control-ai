@@ -13,12 +13,25 @@ from services.contract_extractor import get_contract_extractor
 from services.contract_analyzer import get_contract_analyzer
 from services.claim_evaluator import get_claim_evaluator
 
+import os
+
 app = FastAPI(title="DamageControl AI API")
 
 # Configuration CORS pour permettre les requêtes depuis le frontend
+# En production, FRONTEND_URL sera défini dans les variables d'environnement
+allowed_origins = [
+    "http://localhost:5173",  # Développement local
+    "http://localhost:3000",  # Alternative
+]
+
+# Ajouter l'URL du frontend en production si définie
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Port par défaut de Vite
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

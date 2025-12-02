@@ -1,31 +1,21 @@
 <template>
   <div class="claim-evaluator">
     <h2>🔍 Évaluation du Sinistre</h2>
-    
+
     <!-- Sélection des fichiers -->
     <div v-if="!evaluation" class="file-selection">
       <div class="selection-card">
         <h3>📸 Image du sinistre</h3>
-        <input
-          v-model="imageFilename"
-          type="text"
-          placeholder="Ex: image_abc123.jpg"
-          class="file-input"
-        />
+        <input v-model="imageFilename" type="text" placeholder="Ex: image_abc123.jpg" class="file-input" />
         <p class="hint">Nom du fichier image uploadé</p>
       </div>
-      
+
       <div class="selection-card">
         <h3>📄 Contrat d'assurance</h3>
-        <input
-          v-model="contractFilename"
-          type="text"
-          placeholder="Ex: contract_xyz789.pdf"
-          class="file-input"
-        />
+        <input v-model="contractFilename" type="text" placeholder="Ex: contract_xyz789.pdf" class="file-input" />
         <p class="hint">Nom du fichier contrat uploadé</p>
       </div>
-      
+
       <div class="selection-card">
         <h3>⚠️ Type de sinistre</h3>
         <select v-model="damageType" class="damage-type-select">
@@ -36,12 +26,9 @@
           <option value="vandalisme">Vandalisme</option>
         </select>
       </div>
-      
-      <button
-        @click="evaluateClaim"
-        :disabled="!imageFilename || !contractFilename || isEvaluating"
-        class="evaluate-btn"
-      >
+
+      <button @click="evaluateClaim" :disabled="!imageFilename || !contractFilename || isEvaluating"
+        class="evaluate-btn">
         {{ isEvaluating ? '⏳ Évaluation en cours...' : '🔍 Évaluer le sinistre' }}
       </button>
     </div>
@@ -104,11 +91,8 @@
           <div class="info-item">
             <span class="label">Garanties applicables</span>
             <div class="garanties-list">
-              <span
-                v-for="garantie in evaluation.coverage.garanties_applicables"
-                :key="garantie"
-                class="garantie-badge"
-              >
+              <span v-for="garantie in evaluation.coverage.garanties_applicables" :key="garantie"
+                class="garantie-badge">
                 {{ formatGarantieName(garantie) }}
               </span>
               <span v-if="evaluation.coverage.garanties_applicables.length === 0" class="no-garantie">
@@ -125,7 +109,7 @@
         <div class="severity-badge" :class="evaluation.damages.severity">
           {{ formatSeverity(evaluation.damages.severity) }}
         </div>
-        
+
         <div v-if="evaluation.damages.breakdown.length > 0" class="breakdown-table">
           <table>
             <thead>
@@ -170,6 +154,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { API_URL } from '../config.js'
 
 const imageFilename = ref('')
 const contractFilename = ref('')
@@ -225,7 +210,7 @@ const evaluateClaim = async () => {
 
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/evaluate/claim?image_filename=${encodeURIComponent(imageFilename.value)}&contract_filename=${encodeURIComponent(contractFilename.value)}&damage_type=${damageType.value}`,
+      `${API_URL}/evaluate/claim?image_filename=${encodeURIComponent(imageFilename.value)}&contract_filename=${encodeURIComponent(contractFilename.value)}&damage_type=${damageType.value}`,
       { method: 'POST' }
     )
 
@@ -367,7 +352,9 @@ h2 {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loader p {

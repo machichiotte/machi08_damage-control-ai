@@ -1,0 +1,14 @@
+[build]
+  # Commande de build
+  command = "npm run build"
+  # Dossier de sortie
+  publish = "dist"
+
+# Redirection pour Vue Router (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Variables d'environnement (à configurer dans l'interface Netlify)
+# VITE_API_URL = "https://ton-backend.railway.app"
