@@ -13,19 +13,23 @@ import cv2
 class DepthEstimator:
     def __init__(self):
         """
-        Initialise le modèle de depth estimation.
-        Utilise depth-anything-small pour des performances optimales.
+        Initialise le service de depth estimation.
+        Le modèle sera chargé à la première utilisation (lazy loading).
         """
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        print(f"🔧 Initialisation du modèle Depth Estimation sur {self.device}...")
+        self.pipe = None
+        print(f"🔧 DepthEstimator initialisé (modèle sera chargé à la demande)")
 
-        # Utiliser le modèle Depth Anything Small (plus rapide)
-        self.pipe = pipeline(
-            task="depth-estimation",
-            model="LiheYoung/depth-anything-small-hf",
-            device=0 if self.device == "cuda" else -1,
-        )
-        print("✅ Modèle Depth Estimation chargé avec succès")
+    def _load_model(self):
+        """Charge le modèle si pas encore chargé (lazy loading)"""
+        if self.pipe is None:
+            print(f"📥 Chargement du modèle Depth Estimation sur {self.device}...")
+            self.pipe = pipeline(
+                task="depth-estimation",
+                model="LiheYoung/depth-anything-small-hf",
+                device=0 if self.device == "cuda" else -1,
+            )
+            print("✅ Modèle Depth Estimation chargé avec succès")
 
     def estimate_depth(self, image_path: Path) -> dict:
         """
@@ -40,6 +44,9 @@ class DepthEstimator:
                 - depth_array: Array numpy de la profondeur
                 - stats: Statistiques (min, max, mean)
         """
+        # Charger le modèle si pas encore fait
+        self._load_model()
+
         # Charger l'image
         image = Image.open(image_path).convert("RGB")
 

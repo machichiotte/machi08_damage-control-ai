@@ -18,16 +18,19 @@ import os
 app = FastAPI(title="DamageControl AI API")
 
 # Configuration CORS pour permettre les requêtes depuis le frontend
-# En production, FRONTEND_URL sera défini dans les variables d'environnement
 allowed_origins = [
     "http://localhost:5173",  # Développement local
     "http://localhost:3000",  # Alternative
+    "https://damage-control-ai.netlify.app",  # Production
 ]
 
-# Ajouter l'URL du frontend en production si définie
+# Ajouter l'URL du frontend en production si définie via variable d'environnement
 frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
+if frontend_url and frontend_url not in allowed_origins:
     allowed_origins.append(frontend_url)
+    print(f"✅ CORS: Frontend URL ajoutée: {frontend_url}")
+
+print(f"🔧 CORS: Origines autorisées: {allowed_origins}")
 
 app.add_middleware(
     CORSMiddleware,
