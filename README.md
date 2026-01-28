@@ -122,8 +122,8 @@ Explore the scene in 3D with interactive controls.
 
 ```bash
 cd frontend
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 👉 Frontend accessible at http://localhost:5173
