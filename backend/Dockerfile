@@ -37,8 +37,8 @@ COPY --chown=user . $HOME/app
 # Créer le dossier uploads
 RUN mkdir -p $HOME/app/uploads
 
-# Exposer le port 7860 (port par défaut de Hugging Face Spaces)
-EXPOSE 7860
+# Exposer le port 4008 (Convention Machi 08)
+EXPOSE 4008
 
 # Commande de démarrage
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4008"]
