@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN pnpm build
+RUN VITE_API_URL=/api pnpm build
 
 # --- Production Stage ---
 FROM nginx:stable-alpine

@@ -31,6 +31,10 @@ ENV HOME=/home/user \
 # Définir le répertoire de travail de l'utilisateur
 WORKDIR $HOME/app
 
+# Préparer le dossier de configuration Ultralytics/YOLO
+RUN mkdir -p $HOME/.config/Ultralytics && chown -R user:user $HOME/.config
+ENV YOLO_CONFIG_DIR=$HOME/.config/Ultralytics
+
 # Copier tout le code backend dans le conteneur
 COPY --chown=user . $HOME/app
 
