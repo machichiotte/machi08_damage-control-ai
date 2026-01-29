@@ -148,6 +148,16 @@ uvicorn main:app --reload
 
 Interactive Swagger documentation: http://127.0.0.1:8000/docs
 
+### 🐳 Run with Docker
+
+```bash
+# Start Frontend + Backend
+docker compose up -d
+
+# View logs
+docker compose logs -f
+```
+
 ## 📊 Project Progress
 
 - ✅ **Sprint 1**: Foundations & Infrastructure (100%)
