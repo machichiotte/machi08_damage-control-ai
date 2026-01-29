@@ -1,0 +1,21 @@
+services:
+  backend:
+    extends:
+      file: docker-compose.yml
+      service: backend
+    env_file:
+      - .env.development
+    volumes:
+      - ./backend:/home/user/app
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4008", "--reload"]
+    restart: "no"
+
+  frontend:
+    extends:
+      file: docker-compose.yml
+      service: frontend
+    env_file:
+      - .env.development
+    # For frontend in dev, we often just run it locally or use a dev image
+    # But for consistency we can mount the dist if built, or just use the container
+    restart: "no"

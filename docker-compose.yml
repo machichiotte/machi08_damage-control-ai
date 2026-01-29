@@ -3,20 +3,28 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: machi08_backend:latest
+    container_name: machi08_backend
     ports:
-      - "4008:4008"
+      - "${BACKEND_PORT:-4008}:4008"
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4008"]
     volumes:
       - ./backend/uploads:/home/user/app/uploads
       - ./backend/yolov8n.pt:/home/user/app/yolov8n.pt
-    environment:
-      - FRONTEND_URL=http://localhost:3008
+    env_file:
+      - .env.production
+    restart: always
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-/api}
+    image: machi08_frontend:latest
+    container_name: machi08_frontend
     ports:
-      - "3008:80"
+      - "${FRONTEND_PORT:-3008}:80"
     depends_on:
       - backend
+    restart: always
