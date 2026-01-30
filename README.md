@@ -112,7 +112,7 @@ Explore the scene in 3D with interactive controls.
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - Python 3.9+
 - ~4GB disk space (AI models)
 
